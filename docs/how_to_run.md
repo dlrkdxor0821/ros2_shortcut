@@ -32,7 +32,7 @@ ros2 launch ros2sc_web web_inspector.launch.py address:=0.0.0.0
 
 ### 포트 변경
 ```bash
-ros2 launch ros2sc_web web_inspector.launch.py port:=9090
+ros2 launch ros2sc_web web_inspector.launch.py port:=8081
 ```
 
 ## 3) 브라우저에서 접속
@@ -48,8 +48,10 @@ ros2 launch ros2sc_web web_inspector.launch.py port:=9090
 ## 4) 확인 가능한 정보
 - Topics: 이름 + 타입 목록
 - Services: 이름 + 타입 목록
+- Actions: 이름 + 타입 목록
 - Nodes: 이름/네임스페이스
 - Packages: ament index 기준 설치된 패키지 목록
+- Interface: 타입을 클릭해서 `ros2 interface show` 결과 확인
 
 ## 5) 자주 막히는 포인트(체크리스트)
 - **LAN에서 접속이 안 됨**

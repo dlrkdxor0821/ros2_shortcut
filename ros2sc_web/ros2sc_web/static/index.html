@@ -78,6 +78,11 @@
         background: transparent;
         cursor: pointer;
       }
+      button.small {
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+      }
       pre {
         margin: 0;
         white-space: pre-wrap;
@@ -113,14 +118,72 @@
           "Courier New", monospace;
         font-size: 0.9em;
       }
+      .iface {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed rgba(127, 127, 127, 0.35);
+      }
+      .modalBackdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .modalBackdrop[aria-hidden="false"] {
+        display: flex;
+      }
+      .modal {
+        width: min(980px, 100%);
+        max-height: min(78vh, 900px);
+        overflow: auto;
+        border-radius: 12px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        background: Canvas;
+        color: CanvasText;
+        padding: 12px;
+      }
+      .modalHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        background: Canvas;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+      }
+      .modalHeaderTitle {
+        font-weight: 600;
+      }
+      .modalCmdRow {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 8px 0;
+      }
+      .cmdBox {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        background: rgba(127, 127, 127, 0.08);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 0.9rem;
+        overflow: auto;
+        white-space: pre;
+      }
     </style>
   </head>
   <body>
     <header>
-      <div>
-        <h1 style="margin: 0">ROS2SC Web Inspector</h1>
-        <div class="muted">토픽/서비스/노드/패키지를 웹에서 빠르게 확인</div>
-      </div>
       <div class="row">
         <input id="domain" type="text" inputmode="numeric" placeholder="ROS_DOMAIN_ID (예: 0)" />
         <input id="filter" type="search" placeholder="필터 (예: /tf, camera, nav2)" />
@@ -132,6 +195,7 @@
     <div class="tabs" role="tablist" aria-label="Views">
       <div class="tab" role="tab" tabindex="0" aria-selected="true" data-tab="topics">Topics</div>
       <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="services">Services</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="actions">Actions</div>
       <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="nodes">Nodes</div>
       <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="packages">Packages</div>
     </div>
@@ -142,6 +206,29 @@
         <div class="muted" id="panelCount">-</div>
         <div id="panelBody"></div>
       </section>
+    </div>
+
+    <div id="modalBackdrop" class="modalBackdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modalHeader">
+          <div class="modalHeaderTitle" id="modalTitle">Interface</div>
+          <button id="modalClose" class="small">닫기</button>
+        </div>
+        <div class="muted" id="modalMeta">-</div>
+        <div class="modalCmdRow">
+          <div class="muted">command template</div>
+          <div class="row">
+            <button id="copyCmd" class="small">명령어 복사</button>
+            <button id="copyPayload" class="small">payload 복사</button>
+          </div>
+        </div>
+        <div id="modalCmd" class="cmdBox"></div>
+        <div class="modalCmdRow">
+          <div class="muted">ros2 interface show</div>
+          <button id="copyIface" class="small">복사</button>
+        </div>
+        <pre id="modalBody"></pre>
+      </div>
     </div>
 
     <script>
@@ -161,12 +248,81 @@
         const body = rows
           .map((r) => {
             const tds = columns
-              .map((c) => `<td>${escapeHtml(String(c.get(r) ?? ""))}</td>`)
+              .map((c) => {
+                const v = c.get(r);
+                if (c.html) return `<td>${String(v ?? "")}</td>`;
+                return `<td>${escapeHtml(String(v ?? ""))}</td>`;
+              })
               .join("");
             return `<tr>${tds}</tr>`;
           })
           .join("");
         return `<table>${header}${body}</table>`;
+      }
+
+      function openModal(title, meta, body) {
+        el("modalTitle").textContent = title;
+        el("modalMeta").textContent = meta ?? "";
+        el("modalBody").textContent = body ?? "";
+        el("modalCmd").textContent = "";
+        el("copyCmd").disabled = true;
+        el("copyPayload").disabled = true;
+        el("copyIface").disabled = false;
+        el("modalBackdrop").setAttribute("aria-hidden", "false");
+      }
+
+      function closeModal() {
+        el("modalBackdrop").setAttribute("aria-hidden", "true");
+      }
+
+      async function copyToClipboard(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (_) {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        }
+      }
+
+      async function showInterface(kind, name, type) {
+        try {
+          el("status").textContent = "loading";
+          const ifaceRes = await fetch(`/api/interface?type=${encodeURIComponent(type)}`, { cache: "no-store" });
+          const tplRes = await fetch(
+            `/api/template?kind=${encodeURIComponent(kind)}&name=${encodeURIComponent(
+              name
+            )}&type=${encodeURIComponent(type)}`,
+            { cache: "no-store" }
+          );
+          const res = ifaceRes;
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await ifaceRes.json();
+          const tpl = await tplRes.json();
+
+          const title = data.ok ? `${kind}: ${name}` : `Invalid type`;
+          const meta = data.ok ? `type: ${data.type}` : data.error;
+          const text = data.ok ? data.text : data.error;
+          openModal("Interface", `${title} | ${meta}`, text || "(empty)");
+
+          const rawCmd = tpl?.ok ? tpl.command : "";
+          const rawPayload = tpl?.ok ? tpl.payload : "";
+          el("modalCmd").textContent = rawCmd;
+          el("copyCmd").disabled = !(tpl?.ok && tpl.command);
+          el("copyPayload").disabled = !(tpl?.ok && tpl.payload);
+
+          el("copyCmd").onclick = () => copyToClipboard(rawCmd || "");
+          el("copyPayload").onclick = () => copyToClipboard(rawPayload || "");
+          el("copyIface").onclick = () =>
+            copyToClipboard(`ros2 interface show ${type}\n\n${el("modalBody").textContent || ""}`);
+
+          el("status").textContent = "ok";
+        } catch (e) {
+          el("status").textContent = "error";
+        }
       }
 
       async function load() {
@@ -182,24 +338,70 @@
 
           const active = document.querySelector('.tab[aria-selected="true"]').dataset.tab;
           if (active === "topics") {
-            const topics = (data.topics || []).filter((t) =>
-              matchesFilter(`${t.name} ${t.types?.join(" ")}`, filter)
-            );
+            const topics = (data.topics || [])
+              .flatMap((t) => (t.types || []).map((ty) => ({ name: t.name, type: ty })))
+              .filter((t) => matchesFilter(`${t.name} ${t.type}`, filter));
             el("panelTitle").textContent = "Topics";
             el("panelCount").textContent = `${topics.length} topics (domain_id=${data.domain_id ?? ""})`;
             el("panelBody").innerHTML = renderTable(topics, [
-              { label: "name", get: (t) => t.name },
-              { label: "types", get: (t) => (t.types || []).join(", ") },
+              {
+                label: "name",
+                get: (t) => `<code>${escapeHtml(t.name)}</code>`,
+                html: true,
+              },
+              { label: "type", get: (t) => `<code>${escapeHtml(t.type)}</code>`, html: true },
+              {
+                label: "interface",
+                get: (t) =>
+                  `<button class="small ifaceBtn" data-kind="topic" data-name="${escapeHtml(
+                    t.name
+                  )}" data-type="${escapeHtml(t.type)}">보기</button>`,
+                html: true,
+              },
             ]);
           } else if (active === "services") {
-            const services = (data.services || []).filter((s) =>
-              matchesFilter(`${s.name} ${s.types?.join(" ")}`, filter)
-            );
+            const services = (data.services || [])
+              .flatMap((s) => (s.types || []).map((ty) => ({ name: s.name, type: ty })))
+              .filter((s) => matchesFilter(`${s.name} ${s.type}`, filter));
             el("panelTitle").textContent = "Services";
             el("panelCount").textContent = `${services.length} services (domain_id=${data.domain_id ?? ""})`;
             el("panelBody").innerHTML = renderTable(services, [
-              { label: "name", get: (s) => s.name },
-              { label: "types", get: (s) => (s.types || []).join(", ") },
+              {
+                label: "name",
+                get: (s) => `<code>${escapeHtml(s.name)}</code>`,
+                html: true,
+              },
+              { label: "type", get: (s) => `<code>${escapeHtml(s.type)}</code>`, html: true },
+              {
+                label: "interface",
+                get: (s) =>
+                  `<button class="small ifaceBtn" data-kind="service" data-name="${escapeHtml(
+                    s.name
+                  )}" data-type="${escapeHtml(s.type)}">보기</button>`,
+                html: true,
+              },
+            ]);
+          } else if (active === "actions") {
+            const actions = (data.actions || [])
+              .flatMap((a) => (a.types || []).map((ty) => ({ name: a.name, type: ty })))
+              .filter((a) => matchesFilter(`${a.name} ${a.type}`, filter));
+            el("panelTitle").textContent = "Actions";
+            el("panelCount").textContent = `${actions.length} actions (domain_id=${data.domain_id ?? ""})`;
+            el("panelBody").innerHTML = renderTable(actions, [
+              {
+                label: "name",
+                get: (a) => `<code>${escapeHtml(a.name)}</code>`,
+                html: true,
+              },
+              { label: "type", get: (a) => `<code>${escapeHtml(a.type)}</code>`, html: true },
+              {
+                label: "interface",
+                get: (a) =>
+                  `<button class="small ifaceBtn" data-kind="action" data-name="${escapeHtml(
+                    a.name
+                  )}" data-type="${escapeHtml(a.type)}">보기</button>`,
+                html: true,
+              },
             ]);
           } else if (active === "nodes") {
             const nodes = (data.nodes || []).filter((n) => matchesFilter(n, filter));
@@ -212,6 +414,16 @@
             el("panelCount").textContent = `${packages.length} packages`;
             el("panelBody").innerHTML = `<pre>${escapeHtml(packages.join("\n"))}</pre>`;
           }
+
+          document.querySelectorAll("button.ifaceBtn").forEach((b) => {
+            b.addEventListener("click", (e) => {
+              e.preventDefault();
+              const kind = b.dataset.kind || (active === "topics" ? "topic" : active === "services" ? "service" : "topic");
+              const name = b.dataset.name || "";
+              const type = b.dataset.type || "";
+              showInterface(kind, name, type);
+            });
+          });
 
           el("status").textContent = "ok";
         } catch (e) {
@@ -248,6 +460,14 @@
 
       el("domain").value = localStorage.getItem("ros2sc_domain_id") ?? "";
       load();
+
+      el("modalClose").addEventListener("click", closeModal);
+      el("modalBackdrop").addEventListener("click", (e) => {
+        if (e.target === el("modalBackdrop")) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
     </script>
   </body>
 </html>
