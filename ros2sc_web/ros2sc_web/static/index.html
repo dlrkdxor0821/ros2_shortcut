@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ROS2SC Web Inspector</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
+          sans-serif;
+        margin: 16px;
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .muted {
+        opacity: 0.7;
+        font-size: 0.9rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .tab {
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        background: transparent;
+        cursor: pointer;
+        user-select: none;
+      }
+      .tab[aria-selected="true"] {
+        border-color: rgba(127, 127, 127, 0.8);
+        font-weight: 600;
+      }
+      .card {
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .card h2 {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+      }
+      input[type="search"] {
+        width: 320px;
+        max-width: 100%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+      }
+      input[type="text"] {
+        width: 180px;
+        max-width: 100%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+      }
+      button {
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        background: transparent;
+        cursor: pointer;
+      }
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.9rem;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(127, 127, 127, 0.35);
+        font-size: 0.8rem;
+        opacity: 0.85;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td, th {
+        text-align: left;
+        padding: 6px 4px;
+        border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+        vertical-align: top;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1 style="margin: 0">ROS2SC Web Inspector</h1>
+        <div class="muted">토픽/서비스/노드/패키지를 웹에서 빠르게 확인</div>
+      </div>
+      <div class="row">
+        <input id="domain" type="text" inputmode="numeric" placeholder="ROS_DOMAIN_ID (예: 0)" />
+        <input id="filter" type="search" placeholder="필터 (예: /tf, camera, nav2)" />
+        <button id="refresh">새로고침</button>
+        <span id="status" class="pill">-</span>
+      </div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Views">
+      <div class="tab" role="tab" tabindex="0" aria-selected="true" data-tab="topics">Topics</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="services">Services</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="nodes">Nodes</div>
+      <div class="tab" role="tab" tabindex="0" aria-selected="false" data-tab="packages">Packages</div>
+    </div>
+
+    <div class="grid">
+      <section class="card" id="panel">
+        <h2 id="panelTitle">Topics</h2>
+        <div class="muted" id="panelCount">-</div>
+        <div id="panelBody"></div>
+      </section>
+    </div>
+
+    <script>
+      const el = (id) => document.getElementById(id);
+
+      function escapeHtml(s) {
+        return s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+      }
+
+      function matchesFilter(text, filter) {
+        if (!filter) return true;
+        return text.toLowerCase().includes(filter.toLowerCase());
+      }
+
+      function renderTable(rows, columns) {
+        const header = `<tr>${columns.map((c) => `<th>${escapeHtml(c.label)}</th>`).join("")}</tr>`;
+        const body = rows
+          .map((r) => {
+            const tds = columns
+              .map((c) => `<td>${escapeHtml(String(c.get(r) ?? ""))}</td>`)
+              .join("");
+            return `<tr>${tds}</tr>`;
+          })
+          .join("");
+        return `<table>${header}${body}</table>`;
+      }
+
+      async function load() {
+        el("status").textContent = "loading";
+        try {
+          const domainId = el("domain").value.trim();
+          const qs = domainId !== "" ? `?domain_id=${encodeURIComponent(domainId)}` : "";
+          const res = await fetch(`/api/snapshot${qs}`, { cache: "no-store" });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+
+          const filter = el("filter").value.trim();
+
+          const active = document.querySelector('.tab[aria-selected="true"]').dataset.tab;
+          if (active === "topics") {
+            const topics = (data.topics || []).filter((t) =>
+              matchesFilter(`${t.name} ${t.types?.join(" ")}`, filter)
+            );
+            el("panelTitle").textContent = "Topics";
+            el("panelCount").textContent = `${topics.length} topics (domain_id=${data.domain_id ?? ""})`;
+            el("panelBody").innerHTML = renderTable(topics, [
+              { label: "name", get: (t) => t.name },
+              { label: "types", get: (t) => (t.types || []).join(", ") },
+            ]);
+          } else if (active === "services") {
+            const services = (data.services || []).filter((s) =>
+              matchesFilter(`${s.name} ${s.types?.join(" ")}`, filter)
+            );
+            el("panelTitle").textContent = "Services";
+            el("panelCount").textContent = `${services.length} services (domain_id=${data.domain_id ?? ""})`;
+            el("panelBody").innerHTML = renderTable(services, [
+              { label: "name", get: (s) => s.name },
+              { label: "types", get: (s) => (s.types || []).join(", ") },
+            ]);
+          } else if (active === "nodes") {
+            const nodes = (data.nodes || []).filter((n) => matchesFilter(n, filter));
+            el("panelTitle").textContent = "Nodes";
+            el("panelCount").textContent = `${nodes.length} nodes (domain_id=${data.domain_id ?? ""})`;
+            el("panelBody").innerHTML = `<pre>${escapeHtml(nodes.join("\n"))}</pre>`;
+          } else if (active === "packages") {
+            const packages = (data.packages || []).filter((p) => matchesFilter(p, filter));
+            el("panelTitle").textContent = "Packages";
+            el("panelCount").textContent = `${packages.length} packages`;
+            el("panelBody").innerHTML = `<pre>${escapeHtml(packages.join("\n"))}</pre>`;
+          }
+
+          el("status").textContent = "ok";
+        } catch (e) {
+          el("status").textContent = "error";
+          el("panelTitle").textContent = "Error";
+          el("panelCount").textContent = "-";
+          el("panelBody").innerHTML = `<pre>${escapeHtml(String(e))}</pre>`;
+        }
+      }
+
+      el("refresh").addEventListener("click", load);
+      el("filter").addEventListener("input", () => {
+        // simple debounce
+        window.clearTimeout(window.__ros2sc_timer);
+        window.__ros2sc_timer = window.setTimeout(load, 150);
+      });
+
+      el("domain").addEventListener("change", () => {
+        localStorage.setItem("ros2sc_domain_id", el("domain").value.trim());
+        load();
+      });
+
+      document.querySelectorAll(".tab").forEach((t) => {
+        const activate = () => {
+          document.querySelectorAll(".tab").forEach((x) => (x.ariaSelected = "false"));
+          t.ariaSelected = "true";
+          load();
+        };
+        t.addEventListener("click", activate);
+        t.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") activate();
+        });
+      });
+
+      el("domain").value = localStorage.getItem("ros2sc_domain_id") ?? "";
+      load();
+    </script>
+  </body>
+</html>
+

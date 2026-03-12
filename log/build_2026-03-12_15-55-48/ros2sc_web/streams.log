@@ -1,0 +1,30 @@
+[1.026s] Invoking command in '/home/rokmc/ros2_shortcut/build/ros2sc_web': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2sc_web/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2sc_web/build --no-deps symlink_data
+[1.341s] running develop
+[1.529s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:363: UserWarning: Unbuilt egg for pytest-repeat [unknown version] (/usr/lib/python3/dist-packages)
+[1.529s]   self.local_index = Environment(self.shadow_path + sys.path)
+[1.572s] running egg_info
+[1.572s] creating ros2sc_web.egg-info
+[1.594s] writing ros2sc_web.egg-info/PKG-INFO
+[1.594s] writing dependency_links to ros2sc_web.egg-info/dependency_links.txt
+[1.594s] writing entry points to ros2sc_web.egg-info/entry_points.txt
+[1.594s] writing requirements to ros2sc_web.egg-info/requires.txt
+[1.594s] writing top-level names to ros2sc_web.egg-info/top_level.txt
+[1.595s] writing manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+[1.638s] reading manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+[1.638s] writing manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+[1.661s] running build_ext
+[1.661s] Creating /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages/ros2sc-web.egg-link (link to .)
+[1.661s] Installing ros2sc_web_server script to /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/ros2sc_web
+[1.662s] 
+[1.662s] Installed /home/rokmc/ros2_shortcut/build/ros2sc_web
+[1.662s] running symlink_data
+[1.662s] creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index
+[1.662s] creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index
+[1.662s] creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index/packages
+[1.662s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/resource/ros2sc_web -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index/packages
+[1.662s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/package.xml -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web
+[1.662s] creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/launch
+[1.662s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/launch/web_inspector.launch.py -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/launch
+[1.662s] creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/static
+[1.662s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/ros2sc_web/static/index.html -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/static
+[1.702s] Invoked command in '/home/rokmc/ros2_shortcut/build/ros2sc_web' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2sc_web/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2sc_web/build --no-deps symlink_data

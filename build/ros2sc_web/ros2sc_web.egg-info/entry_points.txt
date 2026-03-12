@@ -1,0 +1,2 @@
+[console_scripts]
+ros2sc_web_server = ros2sc_web.server:main

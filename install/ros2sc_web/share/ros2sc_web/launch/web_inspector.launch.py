@@ -1,0 +1,1 @@
+/home/rokmc/ros2_shortcut/build/ros2sc_web/launch/web_inspector.launch.py

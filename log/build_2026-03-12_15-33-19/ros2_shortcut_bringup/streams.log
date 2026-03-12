@@ -1,0 +1,28 @@
+[0.685s] Invoking command in '/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages: /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/build --no-deps symlink_data
+[0.907s] running develop
+[1.012s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:363: UserWarning: Unbuilt egg for pytest-repeat [unknown version] (/usr/lib/python3/dist-packages)
+[1.012s]   self.local_index = Environment(self.shadow_path + sys.path)
+[1.037s] running egg_info
+[1.037s] creating ros2_shortcut_bringup.egg-info
+[1.049s] writing ros2_shortcut_bringup.egg-info/PKG-INFO
+[1.049s] writing dependency_links to ros2_shortcut_bringup.egg-info/dependency_links.txt
+[1.049s] writing requirements to ros2_shortcut_bringup.egg-info/requires.txt
+[1.050s] writing top-level names to ros2_shortcut_bringup.egg-info/top_level.txt
+[1.050s] writing manifest file 'ros2_shortcut_bringup.egg-info/SOURCES.txt'
+[1.075s] reading manifest file 'ros2_shortcut_bringup.egg-info/SOURCES.txt'
+[1.075s] writing manifest file 'ros2_shortcut_bringup.egg-info/SOURCES.txt'
+[1.089s] running build_ext
+[1.089s] Creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages/ros2-shortcut-bringup.egg-link (link to .)
+[1.090s] 
+[1.090s] Installed /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup
+[1.090s] running symlink_data
+[1.090s] creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ament_index
+[1.090s] creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ament_index/resource_index
+[1.090s] creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ament_index/resource_index/packages
+[1.090s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/resource/ros2_shortcut_bringup -> /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ament_index/resource_index/packages
+[1.091s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/package.xml -> /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ros2_shortcut_bringup
+[1.091s] creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ros2_shortcut_bringup/launch
+[1.091s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/launch/foxglove_bridge.launch.py -> /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ros2_shortcut_bringup/launch
+[1.091s] creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ros2_shortcut_bringup/config
+[1.091s] symbolically linking /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/config/foxglove_bridge.yaml -> /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/share/ros2_shortcut_bringup/config
+[1.119s] Invoked command in '/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages: /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/build --no-deps symlink_data

@@ -1,0 +1,17 @@
+[1.011s] Invoking command in '/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/build --no-deps symlink_data
+[1.331s] running develop
+[1.514s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:363: UserWarning: Unbuilt egg for pytest-repeat [unknown version] (/usr/lib/python3/dist-packages)
+[1.514s]   self.local_index = Environment(self.shadow_path + sys.path)
+[1.553s] running egg_info
+[1.575s] writing ros2_shortcut_bringup.egg-info/PKG-INFO
+[1.575s] writing dependency_links to ros2_shortcut_bringup.egg-info/dependency_links.txt
+[1.575s] writing requirements to ros2_shortcut_bringup.egg-info/requires.txt
+[1.575s] writing top-level names to ros2_shortcut_bringup.egg-info/top_level.txt
+[1.618s] reading manifest file 'ros2_shortcut_bringup.egg-info/SOURCES.txt'
+[1.619s] writing manifest file 'ros2_shortcut_bringup.egg-info/SOURCES.txt'
+[1.641s] running build_ext
+[1.641s] Creating /home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages/ros2-shortcut-bringup.egg-link (link to .)
+[1.642s] 
+[1.642s] Installed /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup
+[1.642s] running symlink_data
+[1.675s] Invoked command in '/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2_shortcut_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2_shortcut_bringup/build --no-deps symlink_data

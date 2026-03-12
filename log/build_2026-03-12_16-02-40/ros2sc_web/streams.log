@@ -1,0 +1,19 @@
+[0.995s] Invoking command in '/home/rokmc/ros2_shortcut/build/ros2sc_web': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2sc_web/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2sc_web/build --no-deps symlink_data
+[1.319s] running develop
+[1.512s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:363: UserWarning: Unbuilt egg for pytest-repeat [unknown version] (/usr/lib/python3/dist-packages)
+[1.512s]   self.local_index = Environment(self.shadow_path + sys.path)
+[1.554s] running egg_info
+[1.578s] writing ros2sc_web.egg-info/PKG-INFO
+[1.578s] writing dependency_links to ros2sc_web.egg-info/dependency_links.txt
+[1.578s] writing entry points to ros2sc_web.egg-info/entry_points.txt
+[1.578s] writing requirements to ros2sc_web.egg-info/requires.txt
+[1.578s] writing top-level names to ros2sc_web.egg-info/top_level.txt
+[1.623s] reading manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+[1.624s] writing manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+[1.646s] running build_ext
+[1.646s] Creating /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages/ros2sc-web.egg-link (link to .)
+[1.646s] Installing ros2sc_web_server script to /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/ros2sc_web
+[1.646s] 
+[1.646s] Installed /home/rokmc/ros2_shortcut/build/ros2sc_web
+[1.646s] running symlink_data
+[1.688s] Invoked command in '/home/rokmc/ros2_shortcut/build/ros2sc_web' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/rokmc/ros2_shortcut/build/ros2sc_web/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rokmc/ros2_shortcut/build/ros2sc_web/build --no-deps symlink_data

@@ -1,0 +1,15 @@
+package.xml
+setup.cfg
+setup.py
+launch/web_inspector.launch.py
+resource/ros2sc_web
+ros2sc_web/__init__.py
+ros2sc_web/server.py
+ros2sc_web.egg-info/PKG-INFO
+ros2sc_web.egg-info/SOURCES.txt
+ros2sc_web.egg-info/dependency_links.txt
+ros2sc_web.egg-info/entry_points.txt
+ros2sc_web.egg-info/requires.txt
+ros2sc_web.egg-info/top_level.txt
+ros2sc_web.egg-info/zip-safe
+ros2sc_web/static/index.html

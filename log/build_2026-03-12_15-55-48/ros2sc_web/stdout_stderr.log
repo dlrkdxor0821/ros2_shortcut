@@ -1,0 +1,28 @@
+running develop
+/usr/lib/python3/dist-packages/setuptools/command/easy_install.py:363: UserWarning: Unbuilt egg for pytest-repeat [unknown version] (/usr/lib/python3/dist-packages)
+  self.local_index = Environment(self.shadow_path + sys.path)
+running egg_info
+creating ros2sc_web.egg-info
+writing ros2sc_web.egg-info/PKG-INFO
+writing dependency_links to ros2sc_web.egg-info/dependency_links.txt
+writing entry points to ros2sc_web.egg-info/entry_points.txt
+writing requirements to ros2sc_web.egg-info/requires.txt
+writing top-level names to ros2sc_web.egg-info/top_level.txt
+writing manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+reading manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+writing manifest file 'ros2sc_web.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/python3.12/site-packages/ros2sc-web.egg-link (link to .)
+Installing ros2sc_web_server script to /home/rokmc/ros2_shortcut/install/ros2sc_web/lib/ros2sc_web
+
+Installed /home/rokmc/ros2_shortcut/build/ros2sc_web
+running symlink_data
+creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index
+creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index
+creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index/packages
+symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/resource/ros2sc_web -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ament_index/resource_index/packages
+symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/package.xml -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web
+creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/launch
+symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/launch/web_inspector.launch.py -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/launch
+creating /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/static
+symbolically linking /home/rokmc/ros2_shortcut/build/ros2sc_web/ros2sc_web/static/index.html -> /home/rokmc/ros2_shortcut/install/ros2sc_web/share/ros2sc_web/static

@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: ros2-shortcut-bringup
+Version: 0.0.1
+Summary: Bringup/launch package for ros2_shortcut (Foxglove bridge prototype).
+Maintainer: TODO
+Maintainer-email: TODO@example.com
+License: Apache-2.0

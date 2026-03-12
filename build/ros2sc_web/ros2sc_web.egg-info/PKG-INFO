@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: ros2sc-web
+Version: 0.0.1
+Summary: Local web UI for inspecting ROS 2 graph (topics/services/nodes/types/packages).
+Maintainer: TODO
+Maintainer-email: TODO@example.com
+License: Apache-2.0

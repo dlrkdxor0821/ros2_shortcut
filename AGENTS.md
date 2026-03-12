@@ -4,7 +4,7 @@
 
 ## 프로젝트 목적
 - ROS 2 **Jazzy** 환경에서 토픽/서비스를 “웹에서 보기” 위한 구성을 정리한다.
-- 특히 **Foxglove Studio + `foxglove_bridge`** 조합으로 **이미지/3D(TF, PointCloud2, RobotModel)** 시각화를 쉽게 한다.
+- **웹 UI에서 토픽/서비스/노드/타입/패키지**를 탐색/검색/확인할 수 있는 “ROS 2 Web Inspector” 프로토타입을 만든다.
 
 ## 산출물(우선순위)
 - **문서 우선**: README와 `docs/`에 개념/네트워크/패널 설정을 명확히 정리한다.
@@ -19,10 +19,24 @@
 
 ## 기술 가정/기본값
 - ROS 2 배포판: **Jazzy**
-- 브리지: **`foxglove_bridge`**
-- 뷰어: **Foxglove Studio**
+- 웹 인스펙터: **`ros2sc_web`**
 - 네트워크는 기본적으로 **같은 PC 또는 같은 LAN**을 우선 타겟으로 한다.
 - `ROS_DOMAIN_ID`는 “웹 제공”이 아니라 **발견/분리 목적**임을 문서에서 명확히 한다.
+ - 기본 운영은 **로컬(127.0.0.1)만 허용**을 원칙으로 한다.
+
+## 개발/실행 기본 워크플로우(오버레이 워크스페이스)
+이 프로젝트는 “가상환경” 대신 **ROS 2 overlay workspace** 방식(`~/ros2sc_ws`)을 기본으로 사용한다.
+
+- 워크스페이스 생성: `mkdir -p ~/ros2sc_ws/src`
+- repo 연결(추천: symlink)
+  - `ln -sfn /home/rokmc/ros2_shortcut ~/ros2sc_ws/src/ros2_shortcut`
+- 빌드/소스(현재 셸에서만 적용; `.bashrc`에 자동 추가하지 않음)
+  - `source /opt/ros/jazzy/setup.bash`
+  - `cd ~/ros2sc_ws && colcon build --symlink-install`
+  - `source ~/ros2sc_ws/install/setup.bash`
+
+### 브리지 의존성 주의사항
+- 시스템 패키지 설치는 `sudo`가 필요할 수 있으므로, 비밀번호 입력이 필요한 환경에서는 에이전트가 자동 설치를 완료하지 못할 수 있다.
 
 ## 파일 구조 원칙
 - 사용자 가이드 문서는 `docs/`에 둔다.

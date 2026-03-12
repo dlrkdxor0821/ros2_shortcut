@@ -1,0 +1,16 @@
+# Default configuration for foxglove_bridge.
+#
+# You can override these in the launch file via parameters or launch arguments.
+#
+# Typical usage:
+# - Local only: address: 127.0.0.1
+# - Local + LAN: address: 0.0.0.0
+
+/foxglove_bridge:
+  ros__parameters:
+    address: "127.0.0.1"
+    port: 8765
+    tls: false
+    certfile: ""
+    keyfile: ""
+
